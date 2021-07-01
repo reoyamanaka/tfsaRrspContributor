@@ -2,12 +2,23 @@ from datetime import datetime
 import csv
 from pprint import pprint
 
+
 def getLimit():
     with open("contributions.csv") as rf:
         csvFile = list(csv.reader(rf))
         totalRows = len(csvFile)-1 
         currentLimit = float(csvFile[totalRows][2])
     return currentLimit
+
+
+def getStatus():
+    with open("contributions.csv") as rf:
+        csvFile = list(csv.reader(rf))
+        totalRows = len(csvFile) - 1
+        lastContributed = csvFile[totalRows][0]
+        lastContribution = csvFile[totalRows][1]
+    return getLimit(), lastContributed, lastContribution
+
 
 def enterContribution(amount, addLimit = 0, overwriteLimit = False):
     with open("contributions.csv", "a") as recordFile:
@@ -17,7 +28,10 @@ def enterContribution(amount, addLimit = 0, overwriteLimit = False):
         else:
             recordFile.write(f"{datetime.today().strftime('%Y-%m-%d')},{amount},{getLimit()-amount+addLimit}\n")
 
+
 def main():  
+    print("\nStatus:\n\nCurrent contribution limit: $ %s\nLast contribution date: %s\nLast contribution amount: $ %s\n"%(getStatus()[0], getStatus()[1],getStatus()[2]))        
+
     while True:
         confirmation = input("Would you like to make a contribution today? [Y/N]: ")
         if confirmation.lower() == "y":
