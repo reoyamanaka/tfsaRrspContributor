@@ -7,6 +7,8 @@ def getLimit():
     with open("contributions.csv") as rf:
         csvFile = list(csv.reader(rf))
         totalRows = len(csvFile)-1 
+        if totalRows < 1:
+            return 0
         currentLimit = float(csvFile[totalRows][2])
     return currentLimit
 
@@ -60,15 +62,21 @@ def main():
                         elif updateOption == "2":
                             updatedLimit = float(input("Enter updated contribution limit: "))
                             updateLimit(updatedLimit)
-                            break 
+                            break
+                        else:
+                            print("Invalid input. Please enter 1 or 2: ") 
                     break
                 elif update.lower() == "n":
                     break
+                else:
+                    print("Invalid input. Please enter 'Y' or 'N' (case-insensitive): ")
             contributionAmount = float(input("How much are you contributing? "))
             enterContribution(contributionAmount, addLimit = addLimit)
             break
         elif confirmation.lower() == "n":
             print("\nI see. See you next time.\n")
             break
+        else:
+            print("Invalid input. Please enter 'Y' or 'N' (case-insensitive): ")
 if __name__ == "__main__":
     main()
