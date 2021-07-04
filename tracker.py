@@ -45,14 +45,14 @@ def main():
             initialContribution = float(input("Enter current contribution limit: "))
             wf.write(f"N/A,N/A,{initialContribution}\n")                
     if getStatus(): 
-        print("\nStatus:\n\nCurrent contribution limit: $ %s\nLast contribution date: %s\nLast contribution amount: $ %s\n"%(getStatus()[0], getStatus()[1],getStatus()[2]))        
+        print("\nStatus:\n\nCurrent contribution limit: $ %s\nLast contribution date: %s\nLast contribution amount: $ %s"%(getStatus()[0], getStatus()[1],getStatus()[2]))        
     overwriteLimit = False
     addLimit = 0
     while True:
-        confirmation = input("Would you like to make a contribution today? [Y/N]: ")
+        confirmation = input("\nWould you like to make a contribution today? [Y/N]: ")
         if confirmation.lower() == "y":
             while True:
-                update = input("Would you like to update your contribution limit first? [Y/N]: ")
+                update = input("\nWould you like to update your contribution limit first? [Y/N]: ")
                 if update.lower() == "y":
                     updateOption = input("1) Add an amount to current contribution limit\n2) Overwrite and update total contribution limit\n")
                     while True:
@@ -64,12 +64,12 @@ def main():
                             updateLimit(updatedLimit)
                             break
                         else:
-                            print("Invalid input. Please enter 1 or 2: ") 
+                            print("\nInvalid input. Please enter 1 or 2: ") 
                     break
                 elif update.lower() == "n":
                     break
                 else:
-                    print("Invalid input. Please enter 'Y' or 'N' (case-insensitive): ")
+                    print("\nInvalid input. Please enter 'Y' or 'N' (case-insensitive): ")
             contributionAmount = float(input("How much are you contributing? "))
             enterContribution(contributionAmount, addLimit = addLimit)
             break
@@ -77,6 +77,6 @@ def main():
             print("\nI see. See you next time.\n")
             break
         else:
-            print("Invalid input. Please enter 'Y' or 'N' (case-insensitive): ")
+            print("\nInvalid input. Please enter 'Y' or 'N' (case-insensitive): ")
 if __name__ == "__main__":
     main()
