@@ -11,6 +11,12 @@ def getLimit():
     return currentLimit
 
 
+def updateLimit(newLimit):
+    with open("contributions.csv", "a") as recordFile:
+        recordFile.write(f"{datetime.today().strftime('%Y-%m-%d')},0,{newLimit}\n")        
+    return None
+
+
 def getStatus():
     with open("contributions.csv") as rf:
         csvFile = list(csv.reader(rf))
@@ -24,13 +30,10 @@ def getStatus():
     return getLimit(), lastContributed, lastContribution
 
 
-def enterContribution(amount, addLimit = 0, overwriteLimit = False):
+def enterContribution(amount, addLimit = 0):
     with open("contributions.csv", "a") as recordFile:
-        if overwriteLimit:
-            newLimit = input("Enter new contribution limit AFTER contributing the $ %s: "%amount)
-            recordFile.write(f"{datetime.today().strftime('%Y-%m-%d')},{amount},{newLimit}\n")
-        else:
-            recordFile.write(f"{datetime.today().strftime('%Y-%m-%d')},{amount},{getLimit()-amount+addLimit}\n")
+        recordFile.write(f"{datetime.today().strftime('%Y-%m-%d')},{amount},{getLimit()-amount+addLimit}\n")
+    return None
 
 
 def main():
@@ -38,8 +41,7 @@ def main():
         with open("contributions.csv", "w") as wf:
             wf.write("date,amount,contributionLimit\n")
             initialContribution = float(input("Enter current contribution limit: "))
-            wf.write(f"N/A,N/A,{initialContribution}\n")
-                
+            wf.write(f"N/A,N/A,{initialContribution}\n")                
     if getStatus(): 
         print("\nStatus:\n\nCurrent contribution limit: $ %s\nLast contribution date: %s\nLast contribution amount: $ %s\n"%(getStatus()[0], getStatus()[1],getStatus()[2]))        
     overwriteLimit = False
@@ -48,7 +50,7 @@ def main():
         confirmation = input("Would you like to make a contribution today? [Y/N]: ")
         if confirmation.lower() == "y":
             while True:
-                update = input("Would you like to update your contribution limit? [Y/N]: ")
+                update = input("Would you like to update your contribution limit first? [Y/N]: ")
                 if update.lower() == "y":
                     updateOption = input("1) Add an amount to current contribution limit\n2) Overwrite and update total contribution limit\n")
                     while True:
@@ -56,14 +58,14 @@ def main():
                             addLimit = float(input("Enter limit increase amount: "))
                             break
                         elif updateOption == "2":
-                            overwriteLimit = True
-                            print("I see. Please enter your contribution amount first, and then you will be asked to enter the latest contribution limit.\n")
+                            updatedLimit = float(input("Enter updated contribution limit: "))
+                            updateLimit(updatedLimit)
                             break 
                     break
                 elif update.lower() == "n":
                     break
             contributionAmount = float(input("How much are you contributing? "))
-            enterContribution(contributionAmount, addLimit = addLimit, overwriteLimit = overwriteLimit)
+            enterContribution(contributionAmount, addLimit = addLimit)
             break
         elif confirmation.lower() == "n":
             print("\nI see. See you next time.\n")
