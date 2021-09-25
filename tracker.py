@@ -29,13 +29,23 @@ def getStatus():
 
         lastContributed = csvFile[totalRows][0]
         lastContribution = csvFile[totalRows][1]
-    return getLimit(), lastContributed, lastContribution
+    return getLimit(), lastContributed, lastContribution, getContributionToDate()
 
 
 def enterContribution(amount, addLimit = 0):
     with open("contributions.csv", "a") as recordFile:
         recordFile.write(f"{datetime.today().strftime('%Y-%m-%d')},{amount},{getLimit()-amount+addLimit}\n")
     return None
+
+
+def getContributionToDate():
+    total = 0
+    with open("contributions.csv") as rf:
+        csvFile = list(csv.reader(rf))
+        totalRows = len(csvFile)
+        for i in range(2, totalRows):
+            total += float(csvFile[i][1])
+    return total
 
 
 def main():
@@ -45,7 +55,7 @@ def main():
             initialContribution = float(input("Enter current contribution limit: "))
             wf.write(f"N/A,N/A,{initialContribution}\n")                
     if getStatus(): 
-        print("\nStatus:\n\nCurrent contribution limit: $ %s\nLast contribution date: %s\nLast contribution amount: $ %s"%(getStatus()[0], getStatus()[1],getStatus()[2]))        
+        print("\nStatus:\n\nCurrent contribution limit: $ %s\nLast contribution date: %s\nLast contribution amount: $ %s\nTotal contribution to date: %s"%(getStatus()[0], getStatus()[1],getStatus()[2], getStatus()[3]))        
     overwriteLimit = False
     addLimit = 0
     while True:
